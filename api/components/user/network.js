@@ -1,14 +1,30 @@
-const express = require('express')
+const express = require('express');
 
-const {success} = require('../../../network/response')
-const controller = require('./controller');
+const response = require('../../../network/response');
+const controller = require('./index');
 
-const router = express.Router()
+const router = express.Router();
 
+router.get('/', function (req, res) {
+    controller.list()
+        .then((lista) => {
+            response.success(req, res, lista, 200);
+        })
+        .catch((err) => {
+            response.error(req, res, err.message, 500);
+        });
+    
+});
 
-router.get('/', (req, res) => {
-    const lista = controller.list();
-    success(req, res, lista, 200 )
-})
+router.get('/:id', function (req, res) {
+    controller.get(req.params.id)
+        .then((user) => {
+            response.success(req, res, user, 200);
+        })
+        .catch((err) => {
+            response.error(req, res, err.message, 500);
+        });
+    
+});
 
-module.exports = router
+module.exports = router;
