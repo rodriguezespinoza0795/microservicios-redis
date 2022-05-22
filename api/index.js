@@ -1,11 +1,18 @@
-const express = require("express")
+const express = require('express');
+const swaggerUi = require('swagger-ui-express');
 
-const config = require('../config')
-const user = require('./components/user/network')
+const config = require('../config.js');
+const user = require('./components/user/network');
 
-const app = express()
+const app = express();
 
-app.use("/api/user", user)
+app.use(express.json());
+
+const swaggerDoc = require('./swagger.json');
+
+// ROUER
+app.use('/api/user', user);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
 app.listen(config.api.port, () => {
     console.log(`La aplicación está escuchando en http://localhost:${config.api.port}`)
